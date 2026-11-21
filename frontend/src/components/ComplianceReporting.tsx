@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { api } from "../api";
 
+const STELLAR_ADDRESS_RE = /^G[A-Z2-7]{55}$/;
+
 export function ComplianceReporting() {
   const [activeTab, setActiveTab] = useState<"generate" | "audit" | "verify">("generate");
   const [reportType, setReportType] = useState<
@@ -46,6 +48,13 @@ export function ComplianceReporting() {
   const [auditLoading, setAuditLoading] = useState(false);
 
   const handleGenerate = async () => {
+    const trimmedWallet = walletAddress.trim();
+    if (trimmedWallet && !STELLAR_ADDRESS_RE.test(trimmedWallet)) {
+      setError("Please enter a valid Stellar address (starts with G, 56 characters)");
+      setResult(null);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setResult(null);
