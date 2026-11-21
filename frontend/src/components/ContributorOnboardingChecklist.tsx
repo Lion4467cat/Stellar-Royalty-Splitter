@@ -284,38 +284,40 @@ export const ContributorOnboardingChecklist: React.FC<
           </p>
         </div>
 
-        {/* Demo State Selector for Acceptance Criteria (0%, 50%, 100%) */}
-        <div className="onboarding-state-controls">
-          <label>Test State:</label>
-          <button
-            type="button"
-            className={`onboarding-state-btn ${demoState === "live" ? "active" : ""}`}
-            onClick={() => setDemoState("live")}
-          >
-            Live
-          </button>
-          <button
-            type="button"
-            className={`onboarding-state-btn ${demoState === "0" ? "active" : ""}`}
-            onClick={() => setDemoState("0")}
-          >
-            0%
-          </button>
-          <button
-            type="button"
-            className={`onboarding-state-btn ${demoState === "50" ? "active" : ""}`}
-            onClick={() => setDemoState("50")}
-          >
-            50%
-          </button>
-          <button
-            type="button"
-            className={`onboarding-state-btn ${demoState === "100" ? "active" : ""}`}
-            onClick={() => setDemoState("100")}
-          >
-            100%
-          </button>
-        </div>
+        {/* Demo State Selector for Acceptance Criteria (0%, 50%, 100%) — dev-only */}
+        {import.meta.env.DEV && (
+          <div className="onboarding-state-controls" data-testid="onboarding-demo-controls">
+            <label>Test State:</label>
+            <button
+              type="button"
+              className={`onboarding-state-btn ${demoState === "live" ? "active" : ""}`}
+              onClick={() => setDemoState("live")}
+            >
+              Live
+            </button>
+            <button
+              type="button"
+              className={`onboarding-state-btn ${demoState === "0" ? "active" : ""}`}
+              onClick={() => setDemoState("0")}
+            >
+              0%
+            </button>
+            <button
+              type="button"
+              className={`onboarding-state-btn ${demoState === "50" ? "active" : ""}`}
+              onClick={() => setDemoState("50")}
+            >
+              50%
+            </button>
+            <button
+              type="button"
+              className={`onboarding-state-btn ${demoState === "100" ? "active" : ""}`}
+              onClick={() => setDemoState("100")}
+            >
+              100%
+            </button>
+          </div>
+        )}
       </div>
 
       {error && <div className="onboarding-email-toast error">{error}</div>}
