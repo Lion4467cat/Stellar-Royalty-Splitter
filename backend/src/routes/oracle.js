@@ -1,5 +1,6 @@
 import express from "express";
 import { sendError } from "../error-response.js";
+import { validateContractId } from "../validation.js";
 import {
   storePrediction,
   getLatestPrediction,
@@ -29,6 +30,7 @@ const router = express.Router();
 router.get("/oracle/predict/:contractId", attachRole, requireRole("viewer"), (req, res) => {
   try {
     const { contractId } = req.params;
+    if (!contractId || !validateContractId(contractId, res)) return;
     const { horizon = "7d" } = req.query;
 
     const prediction = getLatestPrediction(contractId, horizon);
@@ -69,7 +71,13 @@ router.post("/oracle/predict", attachRole, requireRole("admin"), (req, res) => {
       predictionHorizon = "7d",
     } = req.body;
 
-    if (!contractId || !predictedAmount || confidence === undefined || !factors || !modelVersion) {
+    if (!contractId) {
+      return sendError(res, 400, "validation_failed", "Missing required fields");
+    }
+
+    if (!validateContractId(contractId, res)) return;
+
+    if (!predictedAmount || confidence === undefined || !factors || !modelVersion) {
       return sendError(res, 400, "validation_failed", "Missing required fields");
     }
 
